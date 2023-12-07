@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:todo_list/data/dummy_tasks.dart';
+import 'package:todo_list/models/task.dart';
+import 'package:todo_list/screens/done.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,9 +12,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final todoTasks = [];
+  void _moveToDoneScreen() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => const DoneScreen()));
+  }
 
-  void _moveToDoneScreen() {}
+  void _removeTask(Task task) {
+    setState(() {
+      tasks.remove(task);
+    });
+  }
+
+  void _markAsDone(Task task) {
+    setState(() {
+      task.isDone = true;
+      completedTasks.add(task);
+      tasks.remove(task);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,20 +95,29 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: 3,
+                itemCount: tasks.length,
                 itemBuilder: ((context, index) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                     child: ListTile(
-                      contentPadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                      contentPadding: const EdgeInsets.fromLTRB(8, 8, 12, 8),
                       titleAlignment: ListTileTitleAlignment.center,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                       tileColor: const Color.fromARGB(255, 35, 35, 40),
-                      leading: const Icon(Icons.circle_outlined),
+                      leading: GestureDetector(
+                        onTap: () {
+                          _markAsDone(tasks[index]);
+                        },
+                        child: const Icon(Icons.circle_outlined),
+
+                        // child: tasks[index].isDone == false
+                        //     ? const Icon(Icons.circle_outlined)
+                        //     : const Icon(Icons.done),
+                      ),
                       title: Text(
-                        'Title',
+                        tasks[index].title,
                         style: GoogleFonts.inter(
                           color: Colors.white,
                           fontSize: 17,
@@ -98,8 +125,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       isThreeLine: true,
-                      subtitle: const Text('when'),
-                      trailing: Image.asset('lib/assets/deleteIcon.png'),
+                      subtitle: Text(
+                        tasks[index].date.toString(),
+                      ),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          _removeTask(tasks[index]);
+                        },
+                        child: Image.asset('lib/assets/deleteIcon.png'),
+                      ),
                     ),
                   );
                 }),
