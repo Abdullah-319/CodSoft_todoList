@@ -45,7 +45,7 @@ class _DoneScreenState extends State<DoneScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+        padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,49 +62,85 @@ class _DoneScreenState extends State<DoneScreen> {
             ),
             const SizedBox(height: 15),
             Expanded(
-              child: ListView.builder(
-                itemCount: completedTasks.length,
-                itemBuilder: ((context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 15, 0),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.fromLTRB(8, 8, 12, 8),
-                      titleAlignment: ListTileTitleAlignment.center,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      tileColor: Colors.white,
-                      leading: GestureDetector(
-                        onTap: () {
-                          _markAsUndone(completedTasks[index]);
-                        },
-                        child: Image.asset(
-                          'lib/assets/done.png',
-                          height: 30,
-                          width: 30,
-                        ),
-                      ),
-                      title: Text(
-                        completedTasks[index].title,
+              child: completedTasks.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No Tasks done',
                         style: GoogleFonts.inter(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      isThreeLine: true,
-                      subtitle: Text(
-                        completedTasks[index].date.toString(),
-                      ),
-                      trailing: GestureDetector(
-                        onTap: () {
-                          _removeTask(completedTasks[index]);
-                        },
-                        child: Image.asset('lib/assets/deleteIcon.png'),
-                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: completedTasks.length,
+                      itemBuilder: ((context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          _markAsUndone(completedTasks[index]);
+                                        },
+                                        child: Image.asset(
+                                          'lib/assets/done.png',
+                                          height: 30,
+                                          width: 30,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            completedTasks[index].title,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          Text(
+                                            completedTasks[index]
+                                                .date
+                                                .toString(),
+                                            style: GoogleFonts.inter(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _removeTask(completedTasks[index]);
+                                    },
+                                    child: Image.asset(
+                                        'lib/assets/deleteIcon.png'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                     ),
-                  );
-                }),
-              ),
             ),
           ],
         ),

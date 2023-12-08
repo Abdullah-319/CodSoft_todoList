@@ -24,4 +24,4 @@ final List<Task> tasks = [
 ];
 
 final List<Task> completedTasks =
-      tasks.where((task) => task.isDone == true).toList();
+    tasks.where((task) => task.isDone == true).toList();

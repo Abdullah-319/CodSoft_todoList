@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:todo_list/data/dummy_tasks.dart';
 import 'package:todo_list/models/task.dart';
 import 'package:todo_list/screens/done.dart';
@@ -85,54 +86,73 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 45),
-            Text(
-              'To do Tasks',
-              style: GoogleFonts.inter(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Text(
+                'To do Tasks',
+                style: GoogleFonts.inter(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
+            const SizedBox(height: 12),
             Expanded(
               child: ListView.builder(
                 itemCount: tasks.length,
                 itemBuilder: ((context, index) {
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.fromLTRB(8, 8, 12, 8),
-                      titleAlignment: ListTileTitleAlignment.center,
-                      shape: RoundedRectangleBorder(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Container(
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
+                        color: const Color.fromARGB(255, 35, 35, 40),
                       ),
-                      tileColor: const Color.fromARGB(255, 35, 35, 40),
-                      leading: GestureDetector(
-                        onTap: () {
-                          _markAsDone(tasks[index]);
-                        },
-                        child: const Icon(Icons.circle_outlined),
-
-                        // child: tasks[index].isDone == false
-                        //     ? const Icon(Icons.circle_outlined)
-                        //     : const Icon(Icons.done),
-                      ),
-                      title: Text(
-                        tasks[index].title,
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    _markAsDone(tasks[index]);
+                                  },
+                                  child: const Icon(Icons.circle_outlined),
+                                ),
+                                const SizedBox(width: 16),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      tasks[index].title,
+                                      style: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      tasks[index].date.toString(),
+                                      style: GoogleFonts.inter(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _removeTask(tasks[index]);
+                              },
+                              child: Image.asset('lib/assets/deleteIcon.png'),
+                            ),
+                          ],
                         ),
-                      ),
-                      isThreeLine: true,
-                      subtitle: Text(
-                        tasks[index].date.toString(),
-                      ),
-                      trailing: GestureDetector(
-                        onTap: () {
-                          _removeTask(tasks[index]);
-                        },
-                        child: Image.asset('lib/assets/deleteIcon.png'),
                       ),
                     ),
                   );
