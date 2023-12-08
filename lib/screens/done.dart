@@ -14,8 +14,8 @@ class _DoneScreenState extends State<DoneScreen> {
   void _markAsUndone(Task task) {
     setState(() {
       task.isDone = false;
-      tasks.add(task);
       completedTasks.remove(task);
+      Navigator.of(context).pop(task);
     });
   }
 
