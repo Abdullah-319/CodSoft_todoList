@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:todo_list/data/dummy_tasks.dart';
 import 'package:todo_list/models/task.dart';
+import 'package:todo_list/screens/create_task.dart';
+// import 'package:todo_list/providers/tasks_list.dart';
 import 'package:todo_list/screens/done.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   void _moveToDoneScreen() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => const DoneScreen()));
+  }
+
+  void _moveToCreateTaskScreen() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => const CreateTaskScreen()));
   }
 
   void _removeTask(Task task) {
@@ -34,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final inTasks= ref.watch(tasksNotifier);
+
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -163,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: _moveToCreateTaskScreen,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(45),
                     child: Image.asset(

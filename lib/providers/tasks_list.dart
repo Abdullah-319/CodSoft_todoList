@@ -1,4 +1,4 @@
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_list/models/task.dart';
 
 class TasksNotifier extends StateNotifier<List<Task>> {
@@ -6,6 +6,10 @@ class TasksNotifier extends StateNotifier<List<Task>> {
 
   void addTask(Task task) {
     state = [task, ...state];
+  }
+
+  void removeTask(Task task) {
+    state = state.where((t) => t.title != task.title).toList();
   }
 }
 
