@@ -33,6 +33,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
           ],
         ),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 12, 0, 0),
