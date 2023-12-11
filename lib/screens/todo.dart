@@ -120,56 +120,60 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                     child: Dismissible(
                       key: GlobalKey(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: const Color.fromARGB(255, 35, 35, 40),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      _markAsDone(tasks[index]);
-                                      _moveToDoneScreen();
-                                    },
-                                    child: const Icon(Icons.circle_outlined),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        tasks[index].title,
-                                        style: GoogleFonts.inter(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w700,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: const Color.fromARGB(255, 35, 35, 40),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        _markAsDone(tasks[index]);
+                                        _moveToDoneScreen();
+                                      },
+                                      child: const Icon(Icons.circle_outlined),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          tasks[index].title,
+                                          style: GoogleFonts.inter(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        tasks[index].date.toString(),
-                                        style: GoogleFonts.inter(
-                                          color: Colors.grey,
-                                          fontSize: 12,
+                                        Text(
+                                          tasks[index].date.toString(),
+                                          style: GoogleFonts.inter(
+                                            color: Colors.grey,
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  _removeTask(tasks[index]);
-                                },
-                                child: Image.asset('lib/assets/deleteIcon.png'),
-                              ),
-                            ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _removeTask(tasks[index]);
+                                  },
+                                  child:
+                                      Image.asset('lib/assets/deleteIcon.png'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
