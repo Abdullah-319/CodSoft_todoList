@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:todo_list/data/dummy_tasks.dart';
 import 'package:todo_list/models/task.dart';
+import 'package:todo_list/providers/tasks_list.dart';
 
-class DoneScreen extends StatefulWidget {
+class DoneScreen extends ConsumerStatefulWidget {
   const DoneScreen({super.key});
 
   @override
-  State<DoneScreen> createState() => _DoneScreenState();
+  ConsumerState<DoneScreen> createState() => _DoneScreenState();
 }
 
-class _DoneScreenState extends State<DoneScreen> {
+class _DoneScreenState extends ConsumerState<DoneScreen> {
   void _markAsUndone(Task task) {
     setState(() {
       task.isDone = false;
-      completedTasks.remove(task);
+
       Navigator.of(context).pop(task);
     });
   }
 
   void _removeTask(Task task) {
-    setState(() {
-      completedTasks.remove(task);
-    });
+    ref.read(tasksNotifier.notifier).removeTask(task);
   }
 
   @override
   Widget build(BuildContext context) {
+    final completedTasks = ref.read(tasksNotifier.notifier).completedTasks();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 23, 224, 188),
       appBar: AppBar(
@@ -115,9 +115,8 @@ class _DoneScreenState extends State<DoneScreen> {
                                             ),
                                           ),
                                           Text(
-                                            completedTasks[index]
-                                                .date
-                                                .toString(),
+                                            formatter.format(
+                                                completedTasks[index].date),
                                             style: GoogleFonts.inter(
                                               color: Colors.grey,
                                               fontSize: 12,

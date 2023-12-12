@@ -11,6 +11,11 @@ class TasksNotifier extends StateNotifier<List<Task>> {
   void removeTask(Task task) {
     state = state.where((t) => t.title != task.title).toList();
   }
+
+  List<Task> completedTasks() {
+    final cmp = state.where((task) => task.isDone == true).toList();
+    return cmp;
+  }
 }
 
 final tasksNotifier = StateNotifierProvider<TasksNotifier, List<Task>>(

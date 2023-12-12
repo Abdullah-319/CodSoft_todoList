@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:todo_list/data/dummy_tasks.dart';
 import 'package:todo_list/models/task.dart';
+import 'package:todo_list/providers/tasks_list.dart';
 import 'package:todo_list/screens/create_task.dart';
-// import 'package:todo_list/providers/tasks_list.dart';
 import 'package:todo_list/screens/done.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -21,7 +20,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .push(MaterialPageRoute(builder: (ctx) => const DoneScreen()));
 
     setState(() {
-      tasks.add(task);
+      ref.read(tasksNotifier.notifier).addTask(task);
     });
   }
 
@@ -32,21 +31,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _removeTask(Task task) {
     setState(() {
-      tasks.remove(task);
+      ref.read(tasksNotifier.notifier).removeTask(task);
     });
   }
 
   void _markAsDone(Task task) {
     setState(() {
       task.isDone = true;
-      completedTasks.add(task);
-      tasks.remove(task);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final inTasks= ref.watch(tasksNotifier);
+    List<Task> newTasks = ref.watch(tasksNotifier);
 
     return Scaffold(
       appBar: AppBar(),
@@ -114,69 +111,92 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 12),
             Expanded(
               child: ListView.builder(
-                itemCount: tasks.length,
+                itemCount: newTasks.length,
                 itemBuilder: ((context, index) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: Dismissible(
-                      key: GlobalKey(),
-                      child: InkWell(
-                        onTap: () {},
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 35, 35, 40),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        _markAsDone(tasks[index]);
-                                        _moveToDoneScreen();
-                                      },
-                                      child: const Icon(Icons.circle_outlined),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                    child: Expanded(
+                      child: newTasks.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No Tasks done',
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : Dismissible(
+                              onDismissed: (direction) {
+                                _removeTask(newTasks[index]);
+                              },
+                              key: GlobalKey(),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color:
+                                        const Color.fromARGB(255, 35, 35, 40),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        24, 24, 24, 24),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          tasks[index].title,
-                                          style: GoogleFonts.inter(
-                                            color: Colors.white,
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.w700,
-                                          ),
+                                        Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                _markAsDone(newTasks[index]);
+                                                _moveToDoneScreen();
+                                              },
+                                              child: const Icon(
+                                                  Icons.circle_outlined),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  newTasks[index].title,
+                                                  style: GoogleFonts.inter(
+                                                    color: Colors.white,
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  formatter
+                                                      .format(
+                                                          newTasks[index].date)
+                                                      .toString(),
+                                                  style: GoogleFonts.inter(
+                                                    color: Colors.grey,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          tasks[index].date.toString(),
-                                          style: GoogleFonts.inter(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                          ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _removeTask(newTasks[index]);
+                                          },
+                                          child: Image.asset(
+                                              'lib/assets/deleteIcon.png'),
                                         ),
                                       ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    _removeTask(tasks[index]);
-                                  },
-                                  child:
-                                      Image.asset('lib/assets/deleteIcon.png'),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                     ),
                   );
                 }),

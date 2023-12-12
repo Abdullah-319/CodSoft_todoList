@@ -2,17 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_list/models/task.dart';
+import 'package:todo_list/providers/tasks_list.dart';
 
-class CreateTaskScreen extends StatefulWidget {
+class CreateTaskScreen extends ConsumerStatefulWidget {
   const CreateTaskScreen({super.key});
 
   @override
-  State<CreateTaskScreen> createState() => _CreateTaskScreenState();
+  ConsumerState<CreateTaskScreen> createState() => _CreateTaskScreenState();
 }
 
-class _CreateTaskScreenState extends State<CreateTaskScreen> {
+class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   final _titleController = TextEditingController();
   DateTime? _selectedDate;
   final _descController = TextEditingController();
@@ -36,7 +38,19 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     });
   }
 
-  void _addTask() {}
+  void _addTask() {
+    if (_titleController.text.trim().isEmpty ||
+        _descController.text.trim().isEmpty ||
+        _selectedDate == null) {
+      _displayDialog();
+      return;
+    }
+    ref.read(tasksNotifier.notifier).addTask(Task(
+          title: _titleController.text,
+          date: _selectedDate!,
+          description: _descController.text,
+        ));
+  }
 
   void _displayDialog() {
     if (Platform.isIOS) {
@@ -138,7 +152,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                       label: Text('Description'),
                     ),
                     controller: _descController,
-                    style: TextStyle(color: Colors.white),
                   ),
                   const SizedBox(height: 206),
                   TextButton.icon(
