@@ -50,6 +50,8 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           date: _selectedDate!,
           description: _descController.text,
         ));
+
+    Navigator.pop(context);
   }
 
   void _displayDialog() {

@@ -16,12 +16,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   void _moveToDoneScreen() async {
-    final task = await Navigator.of(context)
+    Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => const DoneScreen()));
-
-    setState(() {
-      ref.read(tasksNotifier.notifier).addTask(task);
-    });
   }
 
   void _moveToCreateTaskScreen() {
@@ -43,7 +39,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Task> newTasks = ref.watch(tasksNotifier);
+    final newTasks =
+        ref.watch(tasksNotifier).where((task) => task.isDone == false).toList();
 
     return Scaffold(
       appBar: AppBar(),
@@ -151,8 +148,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () {
-                                                _markAsDone(newTasks[index]);
-                                                _moveToDoneScreen();
+                                                setState(() {
+                                                  _markAsDone(newTasks[index]);
+                                                  _moveToDoneScreen();
+                                                });
                                               },
                                               child: const Icon(
                                                   Icons.circle_outlined),

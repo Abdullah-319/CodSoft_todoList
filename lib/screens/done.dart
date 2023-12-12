@@ -15,9 +15,8 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
   void _markAsUndone(Task task) {
     setState(() {
       task.isDone = false;
-
-      Navigator.of(context).pop(task);
     });
+    Navigator.pop(context);
   }
 
   void _removeTask(Task task) {
@@ -94,7 +93,10 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          _markAsUndone(completedTasks[index]);
+                                          setState(() {
+                                            _markAsUndone(
+                                                completedTasks[index]);
+                                          });
                                         },
                                         child: Image.asset(
                                           'lib/assets/done.png',
