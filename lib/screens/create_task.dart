@@ -45,6 +45,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
       _displayDialog();
       return;
     }
+
     ref.read(tasksNotifier.notifier).addTask(Task(
           title: _titleController.text,
           date: _selectedDate!,

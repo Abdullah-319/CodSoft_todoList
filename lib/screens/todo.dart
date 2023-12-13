@@ -39,8 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final newTasks =
-        ref.watch(tasksNotifier).where((task) => task.isDone == false).toList();
+    final newTasks = ref.watch(tasksNotifier.notifier).incompleteTasks();
 
     return Scaffold(
       appBar: AppBar(),

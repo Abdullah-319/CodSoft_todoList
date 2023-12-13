@@ -16,6 +16,7 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
     setState(() {
       task.isDone = false;
     });
+
     Navigator.pop(context);
   }
 
@@ -25,7 +26,7 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final completedTasks = ref.read(tasksNotifier.notifier).completedTasks();
+    final completedTasks = ref.watch(tasksNotifier.notifier).completedTasks();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 23, 224, 188),
       appBar: AppBar(

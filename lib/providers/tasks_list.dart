@@ -16,6 +16,11 @@ class TasksNotifier extends StateNotifier<List<Task>> {
     final cmp = state.where((task) => task.isDone == true).toList();
     return cmp;
   }
+
+  List<Task> incompleteTasks() {
+    final inn = state.where((task) => task.isDone == false).toList();
+    return inn;
+  }
 }
 
 final tasksNotifier = StateNotifierProvider<TasksNotifier, List<Task>>(
