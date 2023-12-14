@@ -129,35 +129,54 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
+                  const SizedBox(height: 26),
                   TextField(
+                    style: const TextStyle(color: Colors.white),
                     controller: _titleController,
-                    decoration: const InputDecoration(
-                      label: Text('Title'),
+                    decoration: InputDecoration(
+                      label: const Text('Title'),
+                      border: const OutlineInputBorder(),
+                      labelStyle: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    style: const TextStyle(color: Colors.white),
+                    maxLength: 50,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      label: const Text('Description'),
+                      labelStyle: GoogleFonts.inter(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    controller: _descController,
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                     _selectedDate == null
                         ? 'No Date Selected'
                         : formatter.format(_selectedDate!),
-                    style: const TextStyle(
-                      fontSize: 13,
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
+                  const SizedBox(height: 8),
                   IconButton(
                     onPressed: _presentDatePicker,
                     icon: const Icon(
                       Icons.calendar_month,
+                      size: 36,
                     ),
                   ),
-                  TextField(
-                    decoration: const InputDecoration(
-                      label: Text('Description'),
-                    ),
-                    controller: _descController,
-                  ),
-                  const SizedBox(height: 206),
-                  TextButton.icon(
+                  const SizedBox(height: 120),
+                  ElevatedButton.icon(
                     style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(
                         Color.fromARGB(255, 117, 46, 207),
@@ -173,7 +192,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                       width: 30,
                     ),
                     label: Text(
-                      'Create Task',
+                      'Done',
                       style: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 16,

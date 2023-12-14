@@ -80,65 +80,71 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
                       itemBuilder: ((context, index) {
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(24, 24, 24, 24),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _markAsUndone(
-                                                completedTasks[index]);
-                                          });
-                                        },
-                                        child: Image.asset(
-                                          'lib/assets/done.png',
-                                          height: 30,
-                                          width: 30,
+                          child: Dismissible(
+                            onDismissed: (direction) {
+                              _removeTask(completedTasks[index]);
+                            },
+                            key: GlobalKey(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _markAsUndone(
+                                                  completedTasks[index]);
+                                            });
+                                          },
+                                          child: Image.asset(
+                                            'lib/assets/done.png',
+                                            height: 30,
+                                            width: 30,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            completedTasks[index].title,
-                                            style: GoogleFonts.inter(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w700,
+                                        const SizedBox(width: 16),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              completedTasks[index].title,
+                                              style: GoogleFonts.inter(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            formatter.format(
-                                                completedTasks[index].date),
-                                            style: GoogleFonts.inter(
-                                              color: Colors.grey,
-                                              fontSize: 12,
+                                            Text(
+                                              formatter.format(
+                                                  completedTasks[index].date),
+                                              style: GoogleFonts.inter(
+                                                color: Colors.grey,
+                                                fontSize: 12,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      _removeTask(completedTasks[index]);
-                                    },
-                                    child: Image.asset(
-                                        'lib/assets/deleteIcon.png'),
-                                  ),
-                                ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        _removeTask(completedTasks[index]);
+                                      },
+                                      child: Image.asset(
+                                          'lib/assets/deleteIcon.png'),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

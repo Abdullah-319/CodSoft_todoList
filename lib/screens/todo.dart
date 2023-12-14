@@ -20,11 +20,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .push(MaterialPageRoute(builder: (ctx) => const DoneScreen()));
   }
 
-  void _moveToCreateTaskScreen() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (ctx) => const CreateTaskScreen()));
-  }
-
   void _removeTask(Task task) {
     setState(() {
       ref.read(tasksNotifier.notifier).removeTask(task);
@@ -114,7 +109,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: Text(
                         'No Tasks to show',
                         style: GoogleFonts.inter(
-                          color: const Color.fromARGB(255, 148, 45, 45),
+                          color: Colors.deepPurple,
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
@@ -151,7 +146,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                               setState(() {
                                                 _markAsDone(undoneTasks[index]);
                                               });
-                                              _moveToDoneScreen();
+                                              _moveToDoneScreen().then((value) {
+                                                setState(() {});
+                                              });
                                             },
                                             child: const Icon(
                                                 Icons.circle_outlined),
@@ -200,22 +197,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       }),
                     ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: _moveToCreateTaskScreen,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(45),
-                    child: Image.asset(
-                      'lib/assets/addIcon.png',
-                    ),
-                  ),
-                ),
-              ],
-            )
           ],
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (ctx) => const CreateTaskScreen()));
+        },
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(45),
+            child: Image.asset('lib/assets/addIcon.png')),
       ),
     );
   }
