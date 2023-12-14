@@ -15,8 +15,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  void _moveToDoneScreen() async {
-    Navigator.of(context)
+  Future _moveToDoneScreen() {
+    return Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => const DoneScreen()));
   }
 
@@ -39,7 +39,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final newTasks = ref.watch(tasksNotifier.notifier).incompleteTasks();
+    final undoneTasks =
+        ref.watch(tasksNotifier).where((task) => task.isDone == false).toList();
 
     return Scaffold(
       appBar: AppBar(),
@@ -63,7 +64,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               height: 15,
             ),
             GestureDetector(
-              onTap: _moveToDoneScreen,
+              onTap: () {
+                _moveToDoneScreen().then((value) => setState(() {}));
+              },
               child: Container(
                 height: 69,
                 width: double.infinity,
@@ -106,99 +109,96 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: 12),
             Expanded(
-              child: ListView.builder(
-                itemCount: newTasks.length,
-                itemBuilder: ((context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                    child: Expanded(
-                      child: newTasks.isEmpty
-                          ? Center(
-                              child: Text(
-                                'No Tasks done',
-                                style: GoogleFonts.inter(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
+              child: undoneTasks.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No Tasks to show',
+                        style: GoogleFonts.inter(
+                          color: const Color.fromARGB(255, 148, 45, 45),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: undoneTasks.length,
+                      itemBuilder: ((context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: Dismissible(
+                            onDismissed: (direction) {
+                              _removeTask(undoneTasks[index]);
+                            },
+                            key: GlobalKey(),
+                            child: GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: const Color.fromARGB(255, 35, 35, 40),
                                 ),
-                              ),
-                            )
-                          : Dismissible(
-                              onDismissed: (direction) {
-                                _removeTask(newTasks[index]);
-                              },
-                              key: GlobalKey(),
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 35, 35, 40),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        24, 24, 24, 24),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  _markAsDone(newTasks[index]);
-                                                  _moveToDoneScreen();
-                                                });
-                                              },
-                                              child: const Icon(
-                                                  Icons.circle_outlined),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  newTasks[index].title,
-                                                  style: GoogleFonts.inter(
-                                                    color: Colors.white,
-                                                    fontSize: 17,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _markAsDone(undoneTasks[index]);
+                                              });
+                                              _moveToDoneScreen();
+                                            },
+                                            child: const Icon(
+                                                Icons.circle_outlined),
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                undoneTasks[index].title,
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.white,
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w700,
                                                 ),
-                                                Text(
-                                                  formatter
-                                                      .format(
-                                                          newTasks[index].date)
-                                                      .toString(),
-                                                  style: GoogleFonts.inter(
-                                                    color: Colors.grey,
-                                                    fontSize: 12,
-                                                  ),
+                                              ),
+                                              Text(
+                                                formatter
+                                                    .format(
+                                                        undoneTasks[index].date)
+                                                    .toString(),
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            _removeTask(newTasks[index]);
-                                          },
-                                          child: Image.asset(
-                                              'lib/assets/deleteIcon.png'),
-                                        ),
-                                      ],
-                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _removeTask(undoneTasks[index]);
+                                        },
+                                        child: Image.asset(
+                                            'lib/assets/deleteIcon.png'),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
+                          ),
+                        );
+                      }),
                     ),
-                  );
-                }),
-              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

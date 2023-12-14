@@ -15,18 +15,20 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
   void _markAsUndone(Task task) {
     setState(() {
       task.isDone = false;
+      Navigator.of(context).pop();
     });
-
-    Navigator.pop(context);
   }
 
   void _removeTask(Task task) {
-    ref.read(tasksNotifier.notifier).removeTask(task);
+    setState(() {
+      ref.read(tasksNotifier.notifier).removeTask(task);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final completedTasks = ref.watch(tasksNotifier.notifier).completedTasks();
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 23, 224, 188),
       appBar: AppBar(

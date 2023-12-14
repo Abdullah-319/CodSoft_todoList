@@ -19,20 +19,13 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   DateTime? _selectedDate;
   final _descController = TextEditingController();
 
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _descController.dispose();
-    super.dispose();
-  }
-
   void _presentDatePicker() async {
     DateTime now = DateTime.now();
     final pickedDate = await showDatePicker(
         context: context,
         initialDate: now,
-        firstDate: DateTime(now.year - 10, now.month, now.day),
-        lastDate: now);
+        firstDate: now,
+        lastDate: DateTime(now.year + 10, now.month, now.day));
     setState(() {
       _selectedDate = pickedDate;
     });
@@ -89,6 +82,13 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
         },
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    super.dispose();
   }
 
   @override
