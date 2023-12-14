@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:todo_list/Services/shared_pref.dart';
 import 'package:todo_list/models/task.dart';
 import 'package:todo_list/providers/tasks_list.dart';
 
@@ -12,14 +13,14 @@ class DoneScreen extends ConsumerStatefulWidget {
 }
 
 class _DoneScreenState extends ConsumerState<DoneScreen> {
-  void _markAsUndone(Task task) {
+  void _markAsUndone(TaskModel task) {
     setState(() {
       task.isDone = false;
       Navigator.of(context).pop();
     });
   }
 
-  void _removeTask(Task task) {
+  void _removeTask(TaskModel task) {
     setState(() {
       ref.read(tasksNotifier.notifier).removeTask(task);
     });
@@ -47,7 +48,7 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 20, 12, 0),
+        padding: const EdgeInsets.fromLTRB(12, 20, 12, 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -83,6 +84,8 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
                           child: Dismissible(
                             onDismissed: (direction) {
                               _removeTask(completedTasks[index]);
+                              SharedPrefService.setToDoList(
+                                  ref.read(tasksNotifier));
                             },
                             key: GlobalKey(),
                             child: Container(
@@ -139,6 +142,8 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         _removeTask(completedTasks[index]);
+                                        SharedPrefService.setToDoList(
+                                            ref.read(tasksNotifier));
                                       },
                                       child: Image.asset(
                                           'lib/assets/deleteIcon.png'),

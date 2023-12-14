@@ -7,6 +7,8 @@ import 'package:todo_list/providers/tasks_list.dart';
 import 'package:todo_list/screens/create_task.dart';
 import 'package:todo_list/screens/done.dart';
 
+import '../Services/shared_pref.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -20,16 +22,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .push(MaterialPageRoute(builder: (ctx) => const DoneScreen()));
   }
 
-  void _removeTask(Task task) {
+  void _removeTask(TaskModel task) {
     setState(() {
       ref.read(tasksNotifier.notifier).removeTask(task);
     });
   }
 
-  void _markAsDone(Task task) {
+  void _markAsDone(TaskModel task) {
     setState(() {
       task.isDone = true;
     });
+  }
+
+  @override
+  void initState() {
+    SharedPrefService.getToDoList().then((value) {
+      value.sort((a, b) => b.date.compareTo(a.date));
+      for (var element in value) {
+        ref.watch(tasksNotifier.notifier).addTask(element);
+      }
+      setState(() {});
+    });
+    super.initState();
   }
 
   @override
@@ -90,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 45),
+            const SizedBox(height: 36),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: Text(
@@ -123,6 +137,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: Dismissible(
                             onDismissed: (direction) {
                               _removeTask(undoneTasks[index]);
+                              SharedPrefService.setToDoList(
+                                  ref.read(tasksNotifier));
                             },
                             key: GlobalKey(),
                             child: GestureDetector(
@@ -146,6 +162,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                               setState(() {
                                                 _markAsDone(undoneTasks[index]);
                                               });
+                                              SharedPrefService.setToDoList(
+                                                  ref.read(tasksNotifier));
                                               _moveToDoneScreen().then((value) {
                                                 setState(() {});
                                               });
@@ -183,6 +201,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       GestureDetector(
                                         onTap: () {
                                           _removeTask(undoneTasks[index]);
+                                          SharedPrefService.setToDoList(
+                                              ref.read(tasksNotifier));
                                         },
                                         child: Image.asset(
                                             'lib/assets/deleteIcon.png'),
@@ -197,19 +217,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       }),
                     ),
             ),
+            const SizedBox(height: 8),
+            Center(
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (ctx) => const CreateTaskScreen()));
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(45),
+                  child: Image.asset('lib/assets/addIcon.png'),
+                ),
+              ),
+            ),
           ],
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (ctx) => const CreateTaskScreen()));
-        },
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(45),
-            child: Image.asset('lib/assets/addIcon.png')),
       ),
     );
   }

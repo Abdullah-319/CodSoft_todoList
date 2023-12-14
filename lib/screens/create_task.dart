@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:todo_list/Services/shared_pref.dart';
 import 'package:todo_list/models/task.dart';
 import 'package:todo_list/providers/tasks_list.dart';
 
@@ -38,13 +39,12 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
       _displayDialog();
       return;
     }
-
-    ref.read(tasksNotifier.notifier).addTask(Task(
+    ref.read(tasksNotifier.notifier).addTask(TaskModel(
           title: _titleController.text,
           date: _selectedDate!,
           description: _descController.text,
         ));
-
+    SharedPrefService.setToDoList(ref.read(tasksNotifier));
     Navigator.pop(context);
   }
 
