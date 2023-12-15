@@ -172,10 +172,11 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                     onPressed: _presentDatePicker,
                     icon: const Icon(
                       Icons.calendar_month,
+                      color: Color.fromARGB(255, 190, 174, 218),
                       size: 36,
                     ),
                   ),
-                  const SizedBox(height: 120),
+                  const SizedBox(height: 150),
                   ElevatedButton.icon(
                     style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(
