@@ -6,6 +6,7 @@ import 'package:todo_list/models/task.dart';
 import 'package:todo_list/providers/tasks_list.dart';
 import 'package:todo_list/screens/create_task.dart';
 import 'package:todo_list/screens/done.dart';
+import 'package:todo_list/screens/task_detail.dart';
 
 import '../Services/shared_pref.dart';
 
@@ -23,6 +24,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _removeTask(TaskModel task) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    var undoSnackbar = SnackBar(
+      backgroundColor: const Color.fromARGB(255, 35, 35, 40),
+      content: Text("You just removed ${task.title}"),
+      action: SnackBarAction(
+        label: "Undo",
+        textColor: Colors.white,
+        onPressed: () {
+          ref.read(tasksNotifier.notifier).addTask(task);
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(undoSnackbar);
+
     setState(() {
       ref.read(tasksNotifier.notifier).removeTask(task);
     });
@@ -120,13 +136,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Expanded(
               child: undoneTasks.isEmpty
                   ? Center(
-                      child: Text(
-                        'No Tasks to show',
-                        style: GoogleFonts.inter(
-                          color: Colors.deepPurple,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: Image.asset(
+                        "lib/assets/empty.png",
+                        height: 236,
+                        width: 236,
                       ),
                     )
                   : ListView.builder(
@@ -141,8 +154,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ref.read(tasksNotifier));
                             },
                             key: GlobalKey(),
-                            child: GestureDetector(
-                              onTap: () {},
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => TaskDetailScreen(
+                                        task: undoneTasks[index])));
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
@@ -219,14 +236,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             const SizedBox(height: 8),
             Center(
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => const CreateTaskScreen()));
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(45),
-                  child: Image.asset('lib/assets/addIcon.png'),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                height: 56,
+                width: 56,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const CreateTaskScreen()));
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    size: 30,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

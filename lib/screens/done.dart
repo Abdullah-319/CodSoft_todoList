@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_list/Services/shared_pref.dart';
 import 'package:todo_list/models/task.dart';
 import 'package:todo_list/providers/tasks_list.dart';
+import 'package:todo_list/screens/task_detail.dart';
 
 class DoneScreen extends ConsumerStatefulWidget {
   const DoneScreen({super.key});
@@ -21,6 +22,24 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
   }
 
   void _removeTask(TaskModel task) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    var undoSnackbar = SnackBar(
+      backgroundColor: Colors.pinkAccent,
+      content: Text("You just removed ${task.title}"),
+      action: SnackBarAction(
+        label: "Undo",
+        textColor: Colors.white,
+        onPressed: () {
+          setState(() {
+            task.isDone = true;
+          });
+          ref.read(tasksNotifier.notifier).addTask(task);
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(undoSnackbar);
+
     setState(() {
       ref.read(tasksNotifier.notifier).removeTask(task);
     });
@@ -67,13 +86,18 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
             Expanded(
               child: completedTasks.isEmpty
                   ? Center(
-                      child: Text(
-                        'No Tasks done',
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      // child: Text(
+                      //   'No Tasks done',
+                      //   style: GoogleFonts.inter(
+                      //     color: Colors.white,
+                      //     fontSize: 20,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
+                      child: Image.asset(
+                        "lib/assets/empty.png",
+                        height: 236,
+                        width: 236,
                       ),
                     )
                   : ListView.builder(
@@ -88,67 +112,74 @@ class _DoneScreenState extends ConsumerState<DoneScreen> {
                                   ref.read(tasksNotifier));
                             },
                             key: GlobalKey(),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(24, 24, 24, 24),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              _markAsUndone(
-                                                  completedTasks[index]);
-                                            });
-                                          },
-                                          child: Image.asset(
-                                            'lib/assets/done.png',
-                                            height: 30,
-                                            width: 30,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => TaskDetailScreen(
+                                        task: completedTasks[index])));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(24, 24, 24, 24),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _markAsUndone(
+                                                    completedTasks[index]);
+                                              });
+                                            },
+                                            child: Image.asset(
+                                              'lib/assets/done.png',
+                                              height: 30,
+                                              width: 30,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              completedTasks[index].title,
-                                              style: GoogleFonts.inter(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w700,
+                                          const SizedBox(width: 16),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                completedTasks[index].title,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
                                               ),
-                                            ),
-                                            Text(
-                                              formatter.format(
-                                                  completedTasks[index].date),
-                                              style: GoogleFonts.inter(
-                                                color: Colors.grey,
-                                                fontSize: 12,
+                                              Text(
+                                                formatter.format(
+                                                    completedTasks[index].date),
+                                                style: GoogleFonts.inter(
+                                                  color: Colors.grey,
+                                                  fontSize: 12,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        _removeTask(completedTasks[index]);
-                                        SharedPrefService.setToDoList(
-                                            ref.read(tasksNotifier));
-                                      },
-                                      child: Image.asset(
-                                          'lib/assets/deleteIcon.png'),
-                                    ),
-                                  ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _removeTask(completedTasks[index]);
+                                          SharedPrefService.setToDoList(
+                                              ref.read(tasksNotifier));
+                                        },
+                                        child: Image.asset(
+                                            'lib/assets/deleteIcon.png'),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

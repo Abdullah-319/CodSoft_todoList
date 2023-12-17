@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:todo_list/Services/shared_pref.dart';
 import 'package:todo_list/models/task.dart';
 import 'package:todo_list/providers/tasks_list.dart';
@@ -93,25 +94,26 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.close,
-                color: Color.fromARGB(255, 117, 46, 207),
-                size: 36,
-              ),
+    return Scaffold(
+      backgroundColor: Colors.deepPurple,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.keyboard_arrow_right,
+              color: Colors.white,
+              size: 36,
             ),
-          ],
-        ),
-        body: Column(
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -129,9 +131,10 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 16),
                   TextField(
                     style: const TextStyle(color: Colors.white),
+                    maxLength: 15,
                     controller: _titleController,
                     decoration: InputDecoration(
                       label: const Text('Title'),
@@ -142,13 +145,15 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   TextField(
                     style: const TextStyle(color: Colors.white),
-                    maxLength: 50,
+                    maxLength: 100,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      label: const Text('Description'),
+                      label: const Text(
+                        'Description',
+                      ),
                       labelStyle: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 14,
@@ -156,7 +161,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                     ),
                     controller: _descController,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   Text(
                     _selectedDate == null
                         ? 'No Date Selected'
@@ -172,7 +177,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                     onPressed: _presentDatePicker,
                     icon: const Icon(
                       Icons.calendar_month,
-                      color: Color.fromARGB(255, 190, 174, 218),
+                      color: Colors.white,
                       size: 36,
                     ),
                   ),
@@ -180,7 +185,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                   ElevatedButton.icon(
                     style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(
-                        Color.fromARGB(255, 117, 46, 207),
+                        Colors.pinkAccent,
                       ),
                       padding: MaterialStatePropertyAll(
                         EdgeInsets.symmetric(horizontal: 106, vertical: 20),
