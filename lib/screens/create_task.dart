@@ -138,7 +138,15 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                     controller: _titleController,
                     decoration: InputDecoration(
                       label: const Text('Title'),
-                      border: const OutlineInputBorder(),
+                      counterStyle: const TextStyle(
+                        color: Colors.white,
+                      ),
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.white,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
                       labelStyle: GoogleFonts.inter(
                         color: Colors.white,
                         fontSize: 14,
@@ -151,8 +159,9 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                     maxLength: 100,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      label: const Text(
-                        'Description',
+                      label: const Text('Description'),
+                      counterStyle: const TextStyle(
+                        color: Colors.white,
                       ),
                       labelStyle: GoogleFonts.inter(
                         color: Colors.white,
@@ -188,7 +197,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                         Colors.pinkAccent,
                       ),
                       padding: MaterialStatePropertyAll(
-                        EdgeInsets.symmetric(horizontal: 106, vertical: 20),
+                        EdgeInsets.symmetric(horizontal: 110, vertical: 15),
                       ),
                     ),
                     onPressed: _addTask,

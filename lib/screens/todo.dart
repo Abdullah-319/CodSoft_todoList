@@ -70,7 +70,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ref.watch(tasksNotifier).where((task) => task.isDone == false).toList();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
