@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_list/screens/todo.dart';
+import 'package:todo_list/screens/splash.dart';
 
 void main() {
   runApp(
@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Task Master',
       theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0x0017171a),
@@ -31,7 +32,7 @@ class _MyAppState extends State<MyApp> {
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 24),
         ),
       ),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

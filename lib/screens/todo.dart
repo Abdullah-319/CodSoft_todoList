@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -154,7 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ref.read(tasksNotifier));
                             },
                             key: GlobalKey(),
-                            child: InkWell(
+                            child: GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (ctx) => TaskDetailScreen(
